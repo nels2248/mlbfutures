@@ -1,34 +1,40 @@
-import logging
-import logging.handlers
-import os
-
+import bs4
 import requests
+import pandas as pd
+import regex
+from datetime import datetime
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger_file_handler = logging.handlers.RotatingFileHandler(
-    "status.log",
-    maxBytes=1024 * 1024,
-    backupCount=1,
-    encoding="utf8",
-)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-logger_file_handler.setFormatter(formatter)
-logger.addHandler(logger_file_handler)
+#create beautiful soup objects
+headers = {
+"Accept-Language" : "en-US,en;q=0.5",
+"User-Agent": "Defined",
+}
 
-try:
-    SOME_SECRET = os.environ["SOME_SECRET"]
-except KeyError:
-    SOME_SECRET = "Token not available!"
-    #logger.info("Token not available!")
-    #raise
+pagedata = requests.get("https://www.vegasinsider.com/mlb/odds/futures/", headers=headers)
+cleanpagedata = bs4.BeautifulSoup(pagedata.text, 'html.parser')
+
+#look for all tables
+table = cleanpagedata.findAll('table')
+
+#create dataframe from first table
+df = pd.read_html(str(table))[0]
+
+#create team column name by pulling only the first text as it also contains pitcher information from the first column
+df['team']  = df[df.columns[0]].str.split().str[0]
+
+#create odds from second column.   using the first column and time of writing this code, it points to fanduel on the vegasinsider app
+df['odds'] = df[df.columns[1]].str.replace('+', '')
+
+#only keep the two columns and drop na values
+df = df[['team', 'odds']].dropna()
+
+#convert the odds to an integer
+df['odds'] = df['odds'].astype('int')
+
+#add current date and time to the dataframe
+df['dateandtimeran'] = datetime.now()
+
+#add results to csv output file
+df.to_csv('mlbfutures.csv', mode='a', index=False, header=True)
 
 
-if __name__ == "__main__":
-    logger.info(f"Token value: {SOME_SECRET}")
-
-    r = requests.get('https://weather.talkpython.fm/api/weather/?city=Berlin&country=DE')
-    if r.status_code == 200:
-        data = r.json()
-        temperature = data["forecast"]["temp"]
-        logger.info(f'Weather in Berlin: {temperature}')
