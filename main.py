@@ -35,6 +35,6 @@ df['odds'] = df['odds'].astype('int')
 df['dateandtimeran'] = datetime.now()
 
 #add results to csv output file
-df.to_csv('mlbfutures.csv', mode='a', index=False, header=True)
+df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
 
 
