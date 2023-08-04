@@ -37,4 +37,6 @@ df['dateandtimeran'] = datetime.now()
 #add results to csv output file
 df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
 
-
+#show results in html.  first pull complete csv then display in html
+df_full = pd.read_csv('mlbfutures.csv')
+df_full.to_html('index.html')
