@@ -11063,3 +11063,8 @@ Rockies,100000,2023-08-25 20:39:47.938458
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Padres",500,2024-10-11 20:41:15.784201
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Guardians",1100,2024-10-11 20:41:15.784201
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Tigers",1000,2024-10-11 20:41:15.784201
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Dodgers",155,2024-10-12 20:41:06.280831
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Yankees",165,2024-10-12 20:41:06.280831
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Mets",425,2024-10-12 20:41:06.280831
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Guardians",1100,2024-10-12 20:41:06.280831
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Tigers",1000,2024-10-12 20:41:06.280831
