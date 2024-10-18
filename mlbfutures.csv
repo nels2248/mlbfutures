@@ -11088,3 +11088,7 @@ Rockies,100000,2023-08-25 20:39:47.938458
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Yankees",110,2024-10-17 20:41:46.267892
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Mets",850,2024-10-17 20:41:46.267892
 "{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Guardians",1500,2024-10-17 20:41:46.267892
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Dodgers",-140,2024-10-18 20:41:14.296476
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Yankees",145,2024-10-18 20:41:14.296476
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Guardians",1000,2024-10-18 20:41:14.296476
+"{""@context"":""https://schema.org"",""@type"":""SportsTeam"",""name"":""Mets",2200,2024-10-18 20:41:14.296476
