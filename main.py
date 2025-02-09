@@ -1,14 +1,44 @@
 import bs4
 import requests
 import pandas as pd
-import regex
+import regex as re
 from datetime import datetime
+import json
 
 #create beautiful soup objects
 headers = {
 "Accept-Language" : "en-US,en;q=0.5",
 "User-Agent": "Defined",
 }
+
+#Function to extract team name from the JSON string
+def extract_team_name(json_string):
+    if isinstance(json_string, str):  # Check if it's a string
+        # Use a regular expression to extract valid JSON part (everything up to the first occurrence of '}')
+        json_match = re.match(r'({.*?})', json_string)
+        
+        if json_match:
+            json_part = json_match.group(1)  # Get the valid JSON part
+            
+            try:
+                # Parse the JSON
+                json_data = json.loads(json_part)
+                
+                # Extract the team name
+                team_name = json_data.get('name', None)
+                
+                # Split to remove extra info (like odds)
+                if team_name:
+                    team_name = team_name.split(" ")[0]  # This will give you "Dodgers" or "Yankees"
+                
+                return team_name
+            except json.JSONDecodeError:
+                return None  # If JSON is still invalid, return None
+        else:
+            return None  # If no valid JSON found, return None
+    else:
+        return None  # Handle non-string values by returning None
+
 
 pagedata = requests.get("https://www.vegasinsider.com/mlb/odds/futures/", headers=headers)
 cleanpagedata = bs4.BeautifulSoup(pagedata.text, 'html.parser')
@@ -19,20 +49,25 @@ table = cleanpagedata.findAll('table')
 #create dataframe from first table
 df = pd.read_html(str(table))[0]
 
-#create team column name by pulling only the first text as it also contains pitcher information from the first column
-df['team']  = df[df.columns[0]].str.split().str[0]
+#drop the first row as it's empty
+df = df.drop(index=0)
+
+
+#use function to get values
+df['team'] = df.iloc[:,0].apply(extract_team_name) 
 
 #create odds from second column.   using the first column and time of writing this code, it points to fanduel on the vegasinsider app
 df['odds'] = df[df.columns[1]].str.replace('+', '')
 
 #only keep the two columns and drop na values
-df = df[['team', 'odds']].dropna()
+df = df[['team',  'odds']].dropna()
 
 #convert the odds to an integer
 df['odds'] = df['odds'].astype('int')
 
 #add current date and time to the dataframe
 df['dateandtimeran'] = datetime.now()
+
 
 #add results to csv output file
 df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
