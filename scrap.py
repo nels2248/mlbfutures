@@ -11,7 +11,4 @@ df_full.to_html('index.html')
 fig = px.line(df_full, x='dateandtimeran', y='odds', color='team', title='Odds Over Time by Team')
 
 # Save the plot as an HTML file
-fig.write_html('odds_over_time_by_team.html')
-
-# Optionally, display the plot
-fig.show()
+fig.write_html('index.html')
