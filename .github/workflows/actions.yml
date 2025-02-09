@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # At 02:00 each day  TESTING TO RUN EVERY 5 MINUTES AFTER 2025 CHANGES
+    - cron: '35 20 * * *' # At 02:00 each day
 
 jobs:
   build:
