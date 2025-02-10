@@ -25,12 +25,8 @@ def extract_team_name(json_string):
                 # Parse the JSON
                 json_data = json.loads(json_part)
                 
-                # Extract the team name
-                team_name = json_data.get('name', None)
-                
-                # Split to remove extra info (like odds)
-                if team_name:
-                    team_name = team_name.split(" ")[0]  # This will give you "Dodgers" or "Yankees"
+                # Extract the description which contains name of team and city/state
+                team_name = json_data.get('description', None) 
                 
                 return team_name
             except json.JSONDecodeError:
@@ -75,6 +71,10 @@ df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
 
 #show results in html.  first pull complete csv then display in html
 df_full = pd.read_csv('mlbfutures.csv')
+
+# Sort by team name and reset index
+df_full = df_full.sort_values(by='team').reset_index(drop=True)
+
 # Create a line chart using plotly
 fig = px.line(df_full, x='dateandtimeran', y='odds', color='team', title='Odds Over Time by Team', markers=True)
 
