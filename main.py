@@ -64,6 +64,7 @@ df['odds'] = df['odds'].astype('int')
 
 #add current date and time to the dataframe
 df['dateandtimeran'] = datetime.now()
+ 
 
 
 #add results to csv output file
@@ -72,18 +73,24 @@ df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
 #show results in html.  first pull complete csv then display in html
 df_full = pd.read_csv('mlbfutures.csv')
 
-# Convert 'dateandtimeran' to datetime and keep only the date part
-df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran']).dt.date
+#df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran']).dt.date
 
 # Sort the DataFrame by 'dateandtimeran' in descending order
-df_full = df_full.sort_values(by='dateandtimeran', ascending=False).reset_index(drop=True)
+#df_full = df_full.sort_values(by='dateandtimeran', ascending=False).reset_index(drop=True)
 
-# Get the unique 'team' values and sort them (if necessary)
-team_order = sorted(df_full['team'].unique())
+# Ensure 'dateandtimeran' is treated as a string (in case some are objects)
+df_full['dateandtimeran'] = df_full['dateandtimeran'].astype(str)
 
+# Convert to datetime, letting Pandas infer the format
+df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran'], errors='coerce')
+
+unique_teams = sorted(df_full['team'].unique())
+
+# Convert 'team' to categorical type with specified order
+df_full['team'] = pd.Categorical(df_full['team'], categories=unique_teams, ordered=True) 
 
 # Create a line chart using plotly
-fig = px.line(df_full, x='dateandtimeran', y='odds', color='team', title='Odds Over Time by Team', markers=True, category_orders={'team': team_order})
-
+fig = px.line(df_full, x='dateandtimeran', y='odds', color='team', title='Odds Over Time by Team', markers=True)
+ 
 # Save the plot as an HTML file
 fig.write_html('index.html')
