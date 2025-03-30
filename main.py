@@ -97,5 +97,28 @@ fig = px.line(
     color_discrete_map=team_colors  # Applying team colors to the lines
 )
 
+# Update layout for better legend interactivity
+fig.update_layout(
+    legend=dict(
+        orientation="h",  # Horizontal legend
+        yanchor="top",  # Place the legend at the top of the chart area
+        y=-0.15,  # Move the legend below the chart (negative value moves it down)
+        xanchor="center",  # Center the legend horizontally
+        x=0.5,  # Center the legend horizontally
+        font=dict(size=10),  # Adjust font size for legend items
+        traceorder="normal",  # Normal order of traces in the legend
+        itemwidth=30,  # Adjust width of each legend item
+        itemsizing='constant',  # Ensure uniform sizing for each legend item
+    ),
+    title=dict(
+        text="Odds Over Time by Team",
+        x=0.5,  # Center title
+        xanchor="center",  # Align title to the center horizontally
+        y=0.95,  # Adjust title position so it doesn't overlap with the legend
+    ),
+    margin=dict(t=50, b=150, l=50, r=50),  # Adjust margins to create space for legend and title
+    autosize=True,  # Auto-size the chart to fit content
+)
+
 # Save as interactive HTML
 fig.write_html('index.html')
