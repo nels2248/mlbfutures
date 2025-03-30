@@ -33,7 +33,7 @@ team_colors = {
     "Minnesota Twins": "#002B5C",
     "New York Mets": "#FF5910",
     "New York Yankees": "#003087",
-    "Oakland Athletics": "#003831",
+    " Athletics": "#003831",
     "Philadelphia Phillies": "#E81828",
     "Pittsburgh Pirates": "#FDB827",
     "San Diego Padres": "#2F241D",
