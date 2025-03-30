@@ -63,34 +63,28 @@ df = df[['team',  'odds']].dropna()
 df['odds'] = df['odds'].astype('int')
 
 #add current date and time to the dataframe
-df['dateandtimeran'] = datetime.now()
+df['dateandtimeran'] = datetime.now().date()
  
 
 
 #add results to csv output file
 df.to_csv('mlbfutures.csv', mode='a', index=False, header=False)
 
-#show results in html.  first pull complete csv then display in html
+# Read the complete CSV
 df_full = pd.read_csv('mlbfutures.csv')
 
-#df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran']).dt.date
+# Ensure 'dateandtimeran' is treated properly
+df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran'], format='mixed').dt.date.astype(str)
 
-# Sort the DataFrame by 'dateandtimeran' in descending order
-#df_full = df_full.sort_values(by='dateandtimeran', ascending=False).reset_index(drop=True)
-
-# Ensure 'dateandtimeran' is treated as a string (in case some are objects)
-df_full['dateandtimeran'] = df_full['dateandtimeran'].astype(str)
-
-# Convert to datetime, letting Pandas infer the format
-df_full['dateandtimeran'] = pd.to_datetime(df_full['dateandtimeran'], errors='coerce')
-
+# Sort teams alphabetically and set categorical order
 unique_teams = sorted(df_full['team'].unique())
+df_full['team'] = pd.Categorical(df_full['team'], categories=unique_teams, ordered=True)
 
-# Convert 'team' to categorical type with specified order
-df_full['team'] = pd.Categorical(df_full['team'], categories=unique_teams, ordered=True) 
+# Sort DataFrame by team (ensures legend order)
+df_full = df_full.sort_values(by=['team', 'dateandtimeran']).reset_index(drop=True)
 
-# Create a line chart using plotly
+# Create the line chart
 fig = px.line(df_full, x='dateandtimeran', y='odds', color='team', title='Odds Over Time by Team', markers=True)
- 
+
 # Save the plot as an HTML file
 fig.write_html('index.html')
